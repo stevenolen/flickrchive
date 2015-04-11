@@ -21,6 +21,9 @@ module Flickrchive
       rescue FlickRaw::FailedResponse => e
         handle_flickr_fail(e)
         retry
+      rescue EOFError
+        Flickrchive.logger.info("Caught network EOFError. Retrying upload")
+        retry
       end
       Flickrchive.logger.info("Uploaded file: #{photo[:filename]}")
       photo[:flickr_id] = id

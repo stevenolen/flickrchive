@@ -7,13 +7,18 @@ module Flickrchive
     def prepare
       fm = FileMagic.new
       Flickrchive.logger.info("Recursively inspecting directory for images, this may take awhile...")
+      self.db.synchronize do
+        @existing_files = self.db.map { |k,v| v[:filename]}
+      end
       files = FileList.new("#{self.directory}/**/*") do |fl|
         self.excludes.each do |exclude_matcher|
           fl.exclude(Regexp.new(exclude_matcher))
         end
       end
+      # get out list of files to attempt to process
+      to_do = files - @existing_files
 
-      files.each do |fn|
+      to_do.each do |fn|
         new_photo = {filename: fn}
         begin
           new_photo[:type] = fm.file(fn)

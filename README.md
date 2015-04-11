@@ -77,6 +77,12 @@ Just to give some performance statistics. I ran `array = FileList['huge_recursiv
   * array took ~20 seconds to be created
   * array takes ~6 seconds to be created when on the local system (same file count size).
 
+###Approximate Scan Time & Size
+
+A directory with ~146k files, photos, videos and sub directories took <3 hours to init into the db. The DB is 47MB (no-compacted) and the debug log file created was 19MB. Actual uploads of these photos to flickr will vary greatly in length depending on upload speeds.
+
+V0.1.1 contains a fix which allows subsequent scans to occur in a far shorter time than the initial scan.
+
 ## Copyright
 Copyright (c) 2015 Steve Nolen
 See [LICENSE][] for details.

@@ -39,6 +39,8 @@ A few notes:
   * Optional fields:
     * log_file (defaults to STDOUT)
     * log_level (defaults to debug, I said this was beta software, right?)
+    * access_token (see below)
+    * access_secret (see below)
   * If you leave out `access_token` and `access_secret` from the config file, you'll be prompted to log in on first run (and the tool will write these back to the config file once you've done so!).
   * setting `log_level` very high will result in a large log file. obvious, but important nonetheless.
   * `excludes` is a yaml list, each of these lines will be pased to `Regexp.new` and will be excluded from the search list!
@@ -82,6 +84,25 @@ Just to give some performance statistics. I ran `array = FileList['huge_recursiv
 A directory with ~146k files, photos, videos and sub directories took <3 hours to init into the db. The DB is 47MB (no-compacted) and the debug log file created was 19MB. Actual uploads of these photos to flickr will vary greatly in length depending on upload speeds.
 
 V0.1.1 contains a fix which allows subsequent scans to occur in a far shorter time than the initial scan.
+
+After 0.1.1, a re-scan of that 146k-file directory (which has ~125k usuable/unique photos) took about 11minutes. 
+```bash
+steve@nas:~$ time flickrchive prep
+
+real    11m29.840s
+user    4m53.585s
+sys     0m12.911s
+```
+
+### TODOs
+
+There are obviously a number of features/code robustness that I'd like to implement in the future. Here's a small list:
+  * subsequent scans should not have to scan over previously ignored files (eg duplicates or non-photos)
+  * support uploads of videos if they meet flickr's requirements (<3min, etc)
+  * limit bandwidth of uploading?
+  * multi-threaded uploads
+  * executor sleep/wake
+  * implement as a single running service (stop polling, watch the directory and wake executor when dir changes)
 
 ## Copyright
 Copyright (c) 2015 Steve Nolen

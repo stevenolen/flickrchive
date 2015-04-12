@@ -21,14 +21,17 @@ module Flickrchive
       rescue FlickRaw::FailedResponse => e
         handle_flickr_fail(e)
         retry
-      rescue EOFError
-        Flickrchive.logger.info("Caught network EOFError. Retrying upload")
+      rescue EOFError, Timeout::Error
+        Flickrchive.logger.info("Caught network error (EOFError or Timeout). Retrying upload")
         retry
       rescue JSON::ParserError
         Flickrchive.logger.error("Received a non-parseable response. Flickr api service is likely unavailable.")
         Flickrchive.logger.error("Sleeping 60 seconds and retrying..")
         sleep 60
         retry
+      rescue => e
+        Flickrchive.logger.error("Unknown error: #{e.to_s}. Exiting...")
+        self.db.close
       end
       Flickrchive.logger.info("Uploaded file: #{photo[:filename]}")
       photo[:flickr_id] = id

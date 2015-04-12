@@ -1,5 +1,6 @@
 require 'flickrchive/prepare'
 require 'flickrchive/execute'
+require 'flickrchive/status'
 require 'yaml'
 require 'daybreak'
 
@@ -7,6 +8,7 @@ module Flickrchive
   class Config
     include Flickrchive::Prepare
     include Flickrchive::Execute
+    include Flickrchive::Status
     attr_accessor :db_file, :directory, :log_level, :log_file, :username, :db, :sets, :excludes
 
     def initialize(config_file = nil)

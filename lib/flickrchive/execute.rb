@@ -69,7 +69,7 @@ module Flickrchive
       if [3, 105, 106].include?(e.code)
         sleep 60 # sleep 60, returning to code which will retry
       else
-        Flickrchive.logger.fail("Uncatchable response from flickr. Check and restart: #{e.msg}")
+        Flickrchive.logger.error("Uncatchable response from flickr. Check and restart: #{e.msg}")
         self.db.close
         exit
       end

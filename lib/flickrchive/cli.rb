@@ -16,5 +16,11 @@ module Flickrchive
       f = Flickrchive::Config.new(options[:config])
       f.execute
     end
+
+    desc 'status', 'get current totals, and upload count'
+    def status
+      f = Flickrchive::Config.new(options[:config])
+      f.status
+    end
   end
 end
